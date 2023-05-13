@@ -1,0 +1,60 @@
+spring:
+  # Database
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: "jdbc:postgresql://localhost:5432/interview" # https://stackoverflow.com/a/52481318/20265936
+    username: interview
+    password: interview
+
+
+
+  # JPA properties
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      #  http://docs.jboss.org/hibernate/orm/5.3/userguide/html_single/Hibernate_User_Guide.html#configurations
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 20
+        jdbc.batch_size: 20  # https://stackoverflow.com/questions/21257819/what-is-the-difference-between-hibernate-jdbc-fetch-size-and-hibernate-jdbc-batc
+        use_sql_comments: true
+    show-sql: true
+    open-in-view: false
+    defer-datasource-initialization: false  # https://stackoverflow.com/a/67678945/548473
+
+  # Jackson Serialization Issue Resolver
+  jackson:
+    visibility:
+      field: any
+      getter: none
+      setter: none
+      is-getter: none
+
+  # Spring Boot color console
+  output.ansi.enabled: always
+  sql:
+    init:
+      mode: always
+
+
+# Logging
+logging:
+  level:
+    root: WARN
+    ru.flint.interview: DEBUG
+    org.springframework.orm.jpa: DEBUG
+    org.springframework.security: DEBUG
+
+# Springdoc
+springdoc.swagger-ui.docExpansion: none
+
+# Server configuration
+server:
+  port: 8080
+  servlet:
+    encoding:
+      charset: UTF-8 # Charset of HTTP requests and responses. Added to the "Content-Type" header if not set explicitly
+      enabled: true # Enable http encoding support
+      force: true
+
