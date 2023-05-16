@@ -30,14 +30,9 @@ public class UserService {
     }
 
     public User getById(long id) {
-        log.info("Get user with id = {}",id);
+        log.info("Find user with id = {}",id);
         return checkFound(repository.findById(id),id, User.class);
     }
-
-//    public List<User> getAllSorted() {
-//        log.info("Get all users");
-//        return repository.findAll(Sort.by("email"));
-//    }
 
     @Transactional
     public User update(long id, User user) {
