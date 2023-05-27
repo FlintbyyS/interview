@@ -3,8 +3,8 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     url: "jdbc:postgresql://localhost:5432/interview" # https://stackoverflow.com/a/52481318/20265936
-    username: interview
-    password: interview
+    username: user
+    password: secret
 
 
 
