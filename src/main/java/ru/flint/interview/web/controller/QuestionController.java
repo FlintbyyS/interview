@@ -7,11 +7,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.flint.interview.entity.Question;
+import ru.flint.interview.entity.Subtopic;
+import ru.flint.interview.entity.Topic;
 import ru.flint.interview.service.QuestionService;
+import ru.flint.interview.service.TopicService;
+import ru.flint.interview.web.dto.QuestionDTO;
+import ru.flint.interview.web.mapper.QuestionMapper;
 
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static ru.flint.interview.util.validation.ValidationUtil.checkNew;
 
@@ -19,37 +25,42 @@ import static ru.flint.interview.util.validation.ValidationUtil.checkNew;
 @RequestMapping(value = QuestionController.REST_URL,produces = MediaType.APPLICATION_JSON_VALUE)
 public class QuestionController {
     public static final String REST_URL = "/api/version1.0/questions";
-    private final QuestionService service;
+    private final QuestionService questionService;
+    private final TopicService topicService;
+    private final QuestionMapper mapper;
 
-    public QuestionController(QuestionService service) {
-        this.service = service;
+    public QuestionController(QuestionService questionService, TopicService topicService, QuestionMapper mapper) {
+        this.questionService = questionService;
+        this.topicService = topicService;
+        this.mapper = mapper;
     }
+
     @GetMapping()
     @ResponseStatus(HttpStatus.I_AM_A_TEAPOT)
-    public List<Question> getAll(){
-        return service.findAll();
+    public List<QuestionDTO> getAll(){
+        return questionService.findAll().stream().map((mapper::toDTO)).collect(Collectors.toList());
     }
-    @GetMapping("/topic")
-    public List<Question> getByTopic(@RequestParam String topic){
-        return service.findByTopicIgnoreCase(topic);
+    @GetMapping("/topic/{id}")
+    public List<QuestionDTO> getByTopic(@PathVariable long id){
+        return questionService.findByTopic(id).stream().map((mapper::toDTO)).collect(Collectors.toList());
     }
     @GetMapping("/topics")
-    public List<String> getTopics(){
-        return service.findTopics();
+    public List<Topic> getTopics(){
+        return topicService.findAll();
     }
-    @GetMapping("/subtopic")
-    public List<Question> getBySubtopic(@RequestParam String subtopic){
-        return service.findBySubtopicIgnoreCase(subtopic);
+    @GetMapping("/topic/subtopic")
+    public List<QuestionDTO> getBySubtopic(@RequestParam long topic_id,@RequestParam long subtopic_id){
+        return questionService.findByTopicAndSubtopic(topic_id,subtopic_id).stream().map((mapper::toDTO)).collect(Collectors.toList());
     }
-    @GetMapping("/subtopics")
-    public List<String> getSubtopicsByTopic(@RequestParam String topic){
-        return service.findSubtopicsByTopic(topic);
+    @GetMapping("/topic/subtopics")
+    public List<Subtopic> getSubtopicsByTopic(@RequestParam long topic_id){
+        return topicService.findSubtopicsByTopic(topic_id);
     }
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Question> createWithLocation(@Valid @RequestBody Question question) {
         checkNew(question);
-        Question created = service.create(question);
+        Question created = questionService.create(question);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
@@ -58,10 +69,10 @@ public class QuestionController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
-        service.delete(id);
+        questionService.delete(id);
     }
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public Question update(@Valid @RequestBody Question question, @PathVariable long id) {
-        return service.update(id,question);
+        return questionService.update(id,question);
     }
 }

@@ -8,6 +8,7 @@ import ru.flint.interview.entity.Question;
 import ru.flint.interview.repository.QuestionRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -30,24 +31,15 @@ public class QuestionService {
         return repository.findAll();
     }
 
-    public List<Question> findByTopicIgnoreCase(String topic) {
-        log.info("Find question with topic = {}",topic);
-        return repository.findByTopicIgnoreCase(topic);
+    public List<Question> findByTopic(long topic_id) {
+        log.info("Find question with topic_id = {}",topic_id);
+        return repository.findByTopic_Id(topic_id);
     }
 
-    public List<String> findTopics() {
-        log.info("Find topics");
-        return repository.findTopics();
-    }
-
-    public List<Question> findBySubtopicIgnoreCase(String subtopic) {
-        log.info("Find question with subtopic = {}",subtopic);
-        return repository.findBySubtopicIgnoreCase(subtopic);
-    }
-
-    public List<String> findSubtopicsByTopic(String topic) {
-        log.info("Find subtopics with topic = {}",topic);
-        return repository.findSubtopicsByTopic(topic);
+    public List<Question> findByTopicAndSubtopic(long topic_id,long subtopic_id) {
+        log.info("Find question with topic_id = {} and subtopic_id = {}",topic_id,subtopic_id);
+        return repository.findByTopic_Id(topic_id).stream().filter(x -> x.getSubtopic().getId() == subtopic_id)
+                .collect(Collectors.toList());
     }
     @Transactional
     public Question update(long id, Question question) {
