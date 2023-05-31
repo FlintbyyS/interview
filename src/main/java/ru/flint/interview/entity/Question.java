@@ -27,9 +27,11 @@ public class Question extends AbstractEntity{
 
     @NotEmpty
     @OneToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
     private Topic topic;
 
     @NotEmpty
     @OneToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
     private Subtopic subtopic;
 }
