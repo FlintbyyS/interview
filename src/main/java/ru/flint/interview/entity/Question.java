@@ -1,6 +1,7 @@
 package ru.flint.interview.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -25,10 +26,10 @@ public class Question extends AbstractEntity{
     private String answer;
 
     @NotEmpty
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private Topic topic;
 
     @NotEmpty
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private Subtopic subtopic;
 }
