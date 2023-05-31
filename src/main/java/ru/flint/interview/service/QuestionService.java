@@ -38,8 +38,7 @@ public class QuestionService {
 
     public List<Question> findByTopicAndSubtopic(long topic_id,long subtopic_id) {
         log.info("Find question with topic_id = {} and subtopic_id = {}",topic_id,subtopic_id);
-        return repository.findByTopic_Id(topic_id).stream().filter(x -> x.getSubtopic().getId() == subtopic_id)
-                .collect(Collectors.toList());
+        return repository.findByTopic_IdAndSubtopic_Id(topic_id,subtopic_id);
     }
     @Transactional
     public Question update(long id, Question question) {
