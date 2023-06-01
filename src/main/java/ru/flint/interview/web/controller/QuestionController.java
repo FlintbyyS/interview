@@ -37,20 +37,23 @@ public class QuestionController {
 
     @GetMapping()
     @ResponseStatus(HttpStatus.I_AM_A_TEAPOT)
-    public List<QuestionDTO> getAll(){
-        return questionService.findAll().stream().map((mapper::toDTO)).collect(Collectors.toList());
+    public List<Question> getAll(){
+        return questionService.findAll();
+//                .stream().map((mapper::toDTO)).collect(Collectors.toList());
     }
     @GetMapping("/topic/{id}")
-    public List<QuestionDTO> getByTopic(@PathVariable long id){
-        return questionService.findByTopic(id).stream().map((mapper::toDTO)).collect(Collectors.toList());
+    public List<Question> getByTopic(@PathVariable long id){
+        return questionService.findByTopic(id);
+//                .stream().map((mapper::toDTO)).collect(Collectors.toList());
     }
     @GetMapping("/topics")
     public List<Topic> getTopics(){
         return topicService.findAll();
     }
     @GetMapping("/topic/subtopic")
-    public List<QuestionDTO> getBySubtopic(@RequestParam long topic_id,@RequestParam long subtopic_id){
-        return questionService.findByTopicAndSubtopic(topic_id,subtopic_id).stream().map((mapper::toDTO)).collect(Collectors.toList());
+    public List<Question> getBySubtopic(@RequestParam long topic_id,@RequestParam long subtopic_id){
+        return questionService.findByTopicAndSubtopic(topic_id,subtopic_id);
+//                .stream().map((mapper::toDTO)).collect(Collectors.toList());
     }
     @GetMapping("/topic/subtopics")
     public List<Subtopic> getSubtopicsByTopic(@RequestParam long topic_id){
