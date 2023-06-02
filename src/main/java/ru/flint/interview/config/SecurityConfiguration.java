@@ -57,8 +57,9 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests()
                 .requestMatchers(HttpMethod.POST,"/api/version1.0/users/profile/register").anonymous()
+                .requestMatchers("api/version1.0/users/profile/**").authenticated()
                 .anyRequest().permitAll()
-//                .and().httpBasic()
+                .and().httpBasic()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().csrf().disable().cors(AbstractHttpConfigurer::disable);
         return http.build();
