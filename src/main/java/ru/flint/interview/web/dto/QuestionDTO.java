@@ -6,17 +6,30 @@ import jakarta.validation.constraints.Size;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 import ru.flint.interview.util.annotation.NoHtml;
+
 @Value
 @EqualsAndHashCode(callSuper = true)
-public class QuestionDTO extends AbstractDTO{
+public class QuestionDTO extends AbstractDTO {
     @Positive
     Long id;
     @NoHtml
     @NotBlank
-    @Size(min = 10,max = 100)
+    @Size(min = 10, max = 100)
     String question;
     @NoHtml
     @NotBlank
-    @Size(min = 20,max = 1000)
+    @Size(min = 20, max = 1000)
     String answer;
+    @Positive
+    Long topic_id;
+    @NoHtml
+    @NotBlank
+    @Size(min = 20, max = 1000)
+    String topic_name;
+    @Positive
+    Long subtopic_id;
+    @NoHtml
+    @NotBlank
+    @Size(min = 20, max = 1000)
+    String subtopic_name;
 }

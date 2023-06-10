@@ -13,6 +13,8 @@ public class QuestionMapper implements Mapper<Question, QuestionDTO>{
 
     @Override
     public QuestionDTO toDTO(Question entity) {
-        return new QuestionDTO(entity.getId(),entity.getQuestion(),entity.getAnswer());
+        return new QuestionDTO(entity.getId(),entity.getQuestion(),entity.getAnswer()
+                ,entity.getTopic().getId(),entity.getTopic().getName()
+                ,entity.getSubtopic().getId(),entity.getSubtopic().getName());
     }
 }

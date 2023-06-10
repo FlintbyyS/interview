@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 import static ru.flint.interview.util.validation.ValidationUtil.checkNew;
 
 @RestController
-@RequestMapping(value = QuestionController.REST_URL,produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = QuestionController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class QuestionController {
     public static final String REST_URL = "/api/version1.0/questions";
     private final QuestionService questionService;
@@ -37,28 +37,34 @@ public class QuestionController {
 
     @GetMapping()
     @ResponseStatus(HttpStatus.I_AM_A_TEAPOT)
-    public List<Question> getAll(){
-        return questionService.findAll();
-//                .stream().map((mapper::toDTO)).collect(Collectors.toList());
+    public List<QuestionDTO> getAll() {
+        return questionService.findAll()
+                .stream().map((mapper::toDTO)).collect(Collectors.toList());
     }
+
     @GetMapping("/topic/{id}")
-    public List<Question> getByTopic(@PathVariable long id){
-        return questionService.findByTopic(id);
-//                .stream().map((mapper::toDTO)).collect(Collectors.toList());
+    public List<QuestionDTO> getByTopic(@PathVariable long id) {
+        return questionService.findByTopic(id)
+                .stream().map((mapper::toDTO)).collect(Collectors.toList());
     }
+
     @GetMapping("/topics")
-    public List<Topic> getTopics(){
+    public List<Topic> getTopics() {
         return topicService.findAll();
     }
+
     @GetMapping("/topic/subtopic")
-    public List<Question> getBySubtopic(@RequestParam long topic_id,@RequestParam long subtopic_id){
-        return questionService.findByTopicAndSubtopic(topic_id,subtopic_id);
-//                .stream().map((mapper::toDTO)).collect(Collectors.toList());
+    public List<QuestionDTO> getBySubtopic(@RequestParam long topic_id, @RequestParam long subtopic_id
+            , @RequestParam(required = false) Long offset, @RequestParam(required = false) Long limit) {
+        return questionService.findByTopicAndSubtopic(topic_id, subtopic_id, offset, limit)
+                .stream().map((mapper::toDTO)).collect(Collectors.toList());
     }
+
     @GetMapping("/topic/subtopics")
-    public List<Subtopic> getSubtopicsByTopic(@RequestParam long topic_id){
+    public List<Subtopic> getSubtopicsByTopic(@RequestParam long topic_id) {
         return topicService.findSubtopicsByTopic(topic_id);
     }
+
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Question> createWithLocation(@Valid @RequestBody Question question) {
@@ -69,13 +75,15 @@ public class QuestionController {
                 .buildAndExpand(created.getId()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
         questionService.delete(id);
     }
+
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public Question update(@Valid @RequestBody Question question, @PathVariable long id) {
-        return questionService.update(id,question);
+        return questionService.update(id, question);
     }
 }
