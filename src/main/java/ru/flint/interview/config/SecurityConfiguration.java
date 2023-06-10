@@ -31,10 +31,12 @@ public class SecurityConfiguration {
     public SecurityConfiguration(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
+
     @Bean
     public UserDetailsService userDetailsService() {
         return email -> {
@@ -53,10 +55,11 @@ public class SecurityConfiguration {
                 .ignoring()
                 .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**");
     }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests()
-                .requestMatchers(HttpMethod.POST,"/api/version1.0/users/profile/register").anonymous()
+                .requestMatchers(HttpMethod.POST, "/api/version1.0/users/profile/register").anonymous()
                 .requestMatchers("api/version1.0/users/profile/**").authenticated()
                 .anyRequest().permitAll()
                 .and().httpBasic()

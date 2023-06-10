@@ -14,14 +14,14 @@ import ru.flint.interview.util.annotation.NoHtml;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "questions")
-public class Question extends AbstractEntity{
+public class Question extends AbstractEntity {
     @NoHtml
     @NotBlank
-    @Size(min = 10,max = 100)
+    @Size(min = 10, max = 100)
     private String question;
     @NoHtml
     @NotBlank
-    @Size(min = 20,max = 1000)
+    @Size(min = 20, max = 1000)
     private String answer;
 
     @NotEmpty

@@ -32,7 +32,7 @@ public class UserController {
         this.mapper = mapper;
     }
 
-    @PostMapping(value = "/profile/register",consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/profile/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<UserDTO> saveRegister(@Valid @RequestBody UserSecurityDTO dto) {
         User created = service.register(mapper.toEntity(dto));
@@ -46,6 +46,7 @@ public class UserController {
     public UserDTO get(@PathVariable long id) {
         return mapper.toDTO(service.getById(id));
     }
+
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> createWithLocation(@Valid @RequestBody UserDTO userDTO) {
         checkNew(userDTO);
@@ -61,9 +62,10 @@ public class UserController {
     public void delete(@PathVariable int id) {
         service.delete(id);
     }
+
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public UserDTO update(@Valid @RequestBody UserDTO userDTO, @PathVariable long id) {
-        return mapper.toDTO(service.update(id,mapper.toEntity(userDTO)));
+        return mapper.toDTO(service.update(id, mapper.toEntity(userDTO)));
     }
 
     @GetMapping("/profile")

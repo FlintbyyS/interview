@@ -8,5 +8,5 @@ import ru.flint.interview.entity.Topic;
 
 @Repository
 @Transactional(readOnly = true)
-public interface TopicRepository extends JpaRepository<Topic,Long> {
+public interface TopicRepository extends JpaRepository<Topic, Long> {
 }

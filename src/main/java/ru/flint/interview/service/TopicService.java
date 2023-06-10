@@ -17,12 +17,14 @@ public class TopicService {
     public TopicService(TopicRepository repository) {
         this.repository = repository;
     }
+
     public List<Topic> findAll() {
         log.info("Find all topics");
         return repository.findAll();
     }
+
     public List<Subtopic> findSubtopicsByTopic(Long id) {
-        log.info("Find subtopics with topic_id = {}",id);
-        return repository.findById(id).isPresent()? repository.findById(id).get().getSubtopics() : null;
+        log.info("Find subtopics with topic_id = {}", id);
+        return repository.findById(id).isPresent() ? repository.findById(id).get().getSubtopics() : null;
     }
 }

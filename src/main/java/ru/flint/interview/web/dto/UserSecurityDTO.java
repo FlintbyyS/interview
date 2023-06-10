@@ -11,7 +11,7 @@ import ru.flint.interview.util.annotation.NoHtml;
 
 @Value
 @EqualsAndHashCode(callSuper = true)
-public class UserSecurityDTO extends AbstractDTO{
+public class UserSecurityDTO extends AbstractDTO {
     @Size(max = 128)
     @NoHtml
     @Email(message = "Please enter valid e-mail")

@@ -12,10 +12,10 @@ import ru.flint.interview.util.annotation.NoHtml;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "subtopics")
-public class Subtopic extends AbstractEntity{
+public class Subtopic extends AbstractEntity {
 
     @NoHtml
     @NotEmpty
-    @Size(min = 3,max = 30)
+    @Size(min = 3, max = 30)
     private String name;
 }

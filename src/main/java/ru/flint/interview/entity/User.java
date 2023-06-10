@@ -1,4 +1,5 @@
 package ru.flint.interview.entity;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
@@ -24,7 +25,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true, exclude = {"password"})
-public class User extends AbstractEntity implements Serializable{
+public class User extends AbstractEntity implements Serializable {
     @Column(name = "email", nullable = false)
     @Email(message = "Enter valid e-mail")
     @NoHtml
@@ -66,9 +67,11 @@ public class User extends AbstractEntity implements Serializable{
     public void setEmail(String email) {
         this.email = StringUtils.hasText(email) ? email.toLowerCase() : null;
     }
+
     public Set<Role> getRoles() {
         return roles;
     }
+
     public void setRoles(Collection<Role> roles) {
         this.roles = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
     }

@@ -10,7 +10,7 @@ import ru.flint.interview.web.dto.UserSecurityDTO;
 import java.util.Set;
 
 @Component
-public class UserMapper implements Mapper<User, UserDTO>{
+public class UserMapper implements Mapper<User, UserDTO> {
     private final PasswordEncoder passwordEncoder;
 
     public UserMapper(PasswordEncoder passwordEncoder) {
@@ -44,7 +44,7 @@ public class UserMapper implements Mapper<User, UserDTO>{
         );
     }
 
-    public User toEntity(UserSecurityDTO dto){
+    public User toEntity(UserSecurityDTO dto) {
         User user = new User(
                 dto.getEmail(),
                 dto.getFirstName(),

@@ -16,22 +16,23 @@ import static ru.flint.interview.util.validation.ValidationUtil.checkFound;
 public class UserService {
     private final UserRepository repository;
 
-    public UserService(UserRepository repository){
+    public UserService(UserRepository repository) {
         this.repository = repository;
     }
+
     public User create(@NotNull User user) {
-        log.info("Create user: {}",user);
+        log.info("Create user: {}", user);
         return repository.save(user);
     }
 
     public void delete(long id) {
-        log.info("Delete user with id = {}",id);
+        log.info("Delete user with id = {}", id);
         repository.deleteById(id);
     }
 
     public User getById(long id) {
-        log.info("Find user with id = {}",id);
-        return checkFound(repository.findById(id),id, User.class);
+        log.info("Find user with id = {}", id);
+        return checkFound(repository.findById(id), id, User.class);
     }
 
     @Transactional
@@ -45,7 +46,7 @@ public class UserService {
     }
 
     @Transactional
-    public User register(User user){
+    public User register(User user) {
         Optional<User> userFromDb = repository.findByEmailIgnoreCase(user.getEmail());
         if (userFromDb.isEmpty()) {
             log.info("Registering user: {}", user);
