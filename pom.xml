@@ -10,7 +10,6 @@
     </parent>
     <groupId>ru.flint</groupId>
     <artifactId>interview</artifactId>
-    <packaging>war</packaging>
     <version>0.0.1-SNAPSHOT</version>
     <name>interview</name>
     <description>interview</description>
