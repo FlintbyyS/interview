@@ -36,7 +36,6 @@ public class QuestionController {
     }
 
     @GetMapping()
-    @ResponseStatus(HttpStatus.I_AM_A_TEAPOT)
     public List<QuestionDTO> getAll() {
         return questionService.findAll()
                 .stream().map((mapper::toDTO)).collect(Collectors.toList());

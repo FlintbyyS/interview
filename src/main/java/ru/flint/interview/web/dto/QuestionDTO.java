@@ -24,12 +24,12 @@ public class QuestionDTO extends AbstractDTO {
     Long topic_id;
     @NoHtml
     @NotBlank
-    @Size(min = 20, max = 1000)
+    @Size(min = 2, max = 30)
     String topic_name;
     @Positive
     Long subtopic_id;
     @NoHtml
     @NotBlank
-    @Size(min = 20, max = 1000)
+    @Size(min = 2, max = 30)
     String subtopic_name;
 }

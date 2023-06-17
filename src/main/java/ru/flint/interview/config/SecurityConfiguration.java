@@ -1,51 +1,33 @@
 package ru.flint.interview.config;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
-import ru.flint.interview.config.security.AuthorizedUser;
-import ru.flint.interview.entity.User;
-import ru.flint.interview.repository.UserRepository;
-
-
-import java.util.Optional;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
+import ru.flint.interview.config.jwt.JwtAuthenticationFilter;
+import ru.flint.interview.entity.user.Role;
 
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
+@EnableMethodSecurity
 @Slf4j
 public class SecurityConfiguration {
-    private final UserRepository userRepository;
 
-    public SecurityConfiguration(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
-
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return email -> {
-            log.debug("Authenticating '{}'", email);
-            Optional<User> optionalUser = userRepository.findByEmailIgnoreCase(email);
-            return new AuthorizedUser(optionalUser.orElseThrow(
-                    () -> new UsernameNotFoundException("User '" + email + "' not found")));
-        };
-    }
+    private final JwtAuthenticationFilter jwtAuthFilter;
+    private final AuthenticationProvider authenticationProvider;
+    private final LogoutHandler logoutHandler;
 
     //  https://spring.io/blog/2022/02/21/spring-security-without-the-websecurityconfigureradapter#configuring-websecurity
     //  https://stackoverflow.com/a/61147599/548473
@@ -58,13 +40,26 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests()
-                .requestMatchers(HttpMethod.POST, "/api/version1.0/users/profile/register").anonymous()
-                .requestMatchers("api/version1.0/users/profile/**").authenticated()
-                .anyRequest().permitAll()
-                .and().httpBasic()
-                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().csrf().disable().cors(AbstractHttpConfigurer::disable);
+        http
+                .csrf()
+                .disable()
+                .authorizeHttpRequests()
+                .requestMatchers("/api/version1.0/questions/**","/error").permitAll()
+                .requestMatchers("/api/version1.0/auth/**").anonymous()
+                .requestMatchers("/api/version1.0/users/profile").permitAll()
+                .requestMatchers("/api/version1.0/users/**").hasRole(String.valueOf(Role.ADMIN))
+                .anyRequest()
+                    .authenticated()
+                .and()
+                    .sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                    .authenticationProvider(authenticationProvider)
+                    .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .logout()
+                .logoutUrl("/api/version1.0/auth/logout")
+                .addLogoutHandler(logoutHandler)
+                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext());
         return http.build();
     }
 }
