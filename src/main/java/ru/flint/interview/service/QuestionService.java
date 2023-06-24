@@ -3,9 +3,11 @@ package ru.flint.interview.service;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.flint.interview.entity.Question;
 import ru.flint.interview.repository.QuestionRepository;
+import ru.flint.interview.util.OffsetBasedPageRequest;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,8 +40,8 @@ public class QuestionService {
 
     public List<Question> findByTopicAndSubtopic(long topic_id, long subtopic_id, Long offset, Long limit) {
         log.info("Find question with topic_id = {} and subtopic_id = {}", topic_id, subtopic_id);
-        return repository.findByTopic_IdAndSubtopic_Id(topic_id, subtopic_id)
-                .stream().skip(offset == null ? 0 : offset).limit(limit == null ? 1000 : limit).collect(Collectors.toList());
+        Pageable pageable = new OffsetBasedPageRequest(offset == null? 0:offset, limit == null? 1000:limit);
+        return repository.findByTopic_IdAndSubtopic_Id(topic_id,subtopic_id,pageable);
     }
 
     @Transactional
