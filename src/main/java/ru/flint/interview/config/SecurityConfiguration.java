@@ -5,10 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -41,25 +43,23 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf()
-                .disable()
-                .authorizeHttpRequests()
-                .requestMatchers("/api/version1.0/questions/**", "/error").permitAll()
-                .requestMatchers("/api/version1.0/auth/**").anonymous()
-                .requestMatchers("/api/version1.0/users/profile").permitAll()
-                .requestMatchers("/api/version1.0/users/**").hasRole(String.valueOf(Role.ADMIN))
-                .anyRequest()
-                .authenticated()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(authorize -> authorize
+                    .requestMatchers("/api/v1/questions/**", "/error").permitAll()
+                    .requestMatchers("/api/v1/auth/**").anonymous()
+                    .requestMatchers("/api/v1/users/profile").authenticated()
+                    .requestMatchers("/api/v1/users/**").hasRole(String.valueOf(Role.ADMIN))
+                    .anyRequest()
+                    .authenticated())
+                .sessionManagement(sessionManagement -> sessionManagement
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .logout()
-                .logoutUrl("/api/version1.0/auth/logout")
-                .addLogoutHandler(logoutHandler)
-                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext());
+                .logout(logout -> logout
+                    .logoutUrl("/api/v1/auth/logout")
+                    .addLogoutHandler(logoutHandler)
+                    .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext()));
+
         return http.build();
     }
 }

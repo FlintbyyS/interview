@@ -4,7 +4,10 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.proxy.HibernateProxy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,10 +19,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-@Getter
-@Setter
-@ToString
-@RequiredArgsConstructor
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -52,7 +52,6 @@ public class User extends AbstractEntity implements UserDetails {
     private Role role;
 
     @OneToMany(mappedBy = "user")
-    @ToString.Exclude
     private List<Token> tokens;
 
     @Override
