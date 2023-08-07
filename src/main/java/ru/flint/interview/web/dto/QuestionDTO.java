@@ -12,22 +12,28 @@ import ru.flint.interview.util.annotation.NoHtml;
 public class QuestionDTO extends AbstractDTO {
     @Positive
     Long id;
+
     @NoHtml
     @NotBlank
     @Size(min = 10, max = 100)
     String question;
+
     @NoHtml
     @NotBlank
     @Size(min = 20, max = 1000)
     String answer;
+
     @Positive
     Long topic_id;
+
     @NoHtml
     @NotBlank
     @Size(min = 2, max = 30)
     String topic_name;
+
     @Positive
     Long subtopic_id;
+
     @NoHtml
     @NotBlank
     @Size(min = 2, max = 30)

@@ -7,7 +7,7 @@ import ru.flint.interview.entity.user.User;
 
 @Getter
 @ToString(of = "user")
-public class AuthorizedUser extends org.springframework.security.core.userdetails.User{
+public class AuthorizedUser extends org.springframework.security.core.userdetails.User {
 
     private final User user;
 

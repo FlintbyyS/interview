@@ -1,4 +1,5 @@
 package ru.flint.interview.web.controller;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ import java.io.IOException;
 @RequestMapping(value = AuthenticationController.REST_URL)
 @RequiredArgsConstructor
 public class AuthenticationController {
-    public static final String REST_URL = "/api/version1.0/auth";
+    public static final String REST_URL = "/api/v1/auth";
     private final AuthenticationService service;
 
     @PostMapping("/register")
@@ -27,6 +28,7 @@ public class AuthenticationController {
     ) {
         return ResponseEntity.ok(service.register(request));
     }
+
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(
             @RequestBody AuthenticationRequest request

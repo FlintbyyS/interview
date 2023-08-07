@@ -39,8 +39,8 @@ public class QuestionService {
 
     public List<Question> findByTopicAndSubtopic(long topic_id, long subtopic_id, Long offset, Long limit) {
         log.info("Find question with topic_id = {} and subtopic_id = {}", topic_id, subtopic_id);
-        Pageable pageable = new OffsetBasedPageRequest(offset == null? 0:offset, limit == null? 1000:limit);
-        return repository.findByTopic_IdAndSubtopic_Id(topic_id,subtopic_id,pageable);
+        Pageable pageable = new OffsetBasedPageRequest(offset == null ? 0 : offset, limit == null ? 1000 : limit);
+        return repository.findByTopic_IdAndSubtopic_Id(topic_id, subtopic_id, pageable);
     }
 
     @Transactional

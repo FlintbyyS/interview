@@ -33,6 +33,7 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 @Slf4j
 public class ApplicationConfig {
     private final UserRepository repository;
+
     @Autowired
     void configureAndStoreObjectMapper(ObjectMapper objectMapper) {
         objectMapper.registerModule(new Hibernate5JakartaModule());
@@ -47,6 +48,7 @@ public class ApplicationConfig {
         @JsonAnyGetter
         Map<String, Object> getProperties();
     }
+
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> repository.findByEmailIgnoreCase(username)

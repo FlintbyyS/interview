@@ -32,9 +32,7 @@ public enum Role {
                     Permission.MANAGER_DELETE,
                     Permission.MANAGER_CREATE
             )
-    )
-
-    ;
+    );
 
     @Getter
     private final Set<Permission> permissions;

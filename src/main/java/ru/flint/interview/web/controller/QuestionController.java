@@ -24,7 +24,7 @@ import static ru.flint.interview.util.validation.ValidationUtil.checkNew;
 @RestController
 @RequestMapping(value = QuestionController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class QuestionController {
-    public static final String REST_URL = "/api/version1.0/questions";
+    public static final String REST_URL = "/api/v1/questions";
     private final QuestionService questionService;
     private final TopicService topicService;
     private final QuestionMapper mapper;

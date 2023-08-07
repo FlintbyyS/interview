@@ -15,7 +15,7 @@ import ru.flint.interview.web.mapper.UserProfileMapper;
 @RequestMapping(value = UserController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserController {
 
-    public static final String REST_URL = "/api/version1.0/users";
+    public static final String REST_URL = "/api/v1/users";
     private final UserProfileMapper profileMapper;
     private final UserService service;
 
@@ -42,6 +42,6 @@ public class UserController {
 
     @PutMapping(path = "/profile", consumes = MediaType.APPLICATION_JSON_VALUE)
     public User updateProfile(@AuthenticationPrincipal User user, @Valid @RequestBody UserProfileDTO userDTO) {
-        return service.update(user.getId(),userDTO);
+        return service.update(user.getId(), userDTO);
     }
 }

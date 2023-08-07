@@ -19,6 +19,7 @@ public class Question extends AbstractEntity {
     @NotBlank
     @Size(min = 10, max = 100)
     private String question;
+
     @NoHtml
     @NotBlank
     @Size(min = 20, max = 1000)
